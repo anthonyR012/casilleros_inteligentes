@@ -1,4 +1,5 @@
 
+import 'package:casilleros_inteligente/config/theme.dart';
 import 'package:casilleros_inteligente/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "Casillero",
+    return MaterialApp(
+      title: "Casillero Inteligente",
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home:const  SplashScreen(),
+      theme: ligthTheme,
     );
   }
 }

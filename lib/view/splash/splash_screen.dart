@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(
               "$gestorJsonBase/casillero_animation.json",
@@ -33,12 +33,15 @@ class _SplashScreenState extends State<SplashScreen> {
                 );
               },
               width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.3,
               fit: BoxFit.fill,
             ),
             const Text(
-              "Casillero",
-              style: TextStyle(fontSize: h1Size, fontWeight: FontWeight.bold),
+              "Casillero Inteligente",
+              style: TextStyle(
+                  fontSize: h1Size,
+                  fontWeight: FontWeight.bold,
+                  color: whiteColor),
             ),
           ],
         ),
