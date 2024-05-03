@@ -1,8 +1,12 @@
+import 'package:casilleros_inteligente/config/navigators.dart';
 import 'package:casilleros_inteligente/config/theme.dart';
 import 'package:casilleros_inteligente/view/login/widgets/alert_center_custom.dart';
 import 'package:casilleros_inteligente/view/login/widgets/button_main_custom.dart';
 import 'package:casilleros_inteligente/view/login/widgets/input_text_custom.dart';
+import 'package:casilleros_inteligente/view/login/widgets/label_divider_widget.dart';
+import 'package:casilleros_inteligente/view/sign_up/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -67,10 +71,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                               splashFactory: NoSplash.splashFactory,
                               onTap: alert.show,
-                              child: Image.asset(
-                                  '$gestorImageBase/finger_print.png')))
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: Colors.transparent,
+                                child: Image.asset(
+                                    '$gestorImageBase/finger_print.png'),
+                              )))
                     ],
                   ),
+                ),
+                const SizedBox(height: 10),
+                LabelMarkDivider(
+                  widthLine: width * .25,
+                  description: "Registrarme",
+                  onTap: () {
+                    pushReplacementWidget(const SignUpScreen(), context);
+                  },
                 )
               ],
             ),
