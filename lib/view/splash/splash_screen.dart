@@ -1,6 +1,7 @@
+import 'package:casilleros_inteligente/config/db.dart';
 import 'package:casilleros_inteligente/config/navigators.dart';
 import 'package:casilleros_inteligente/config/theme.dart';
-import 'package:casilleros_inteligente/view/login/login.dart';
+import 'package:casilleros_inteligente/view/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -12,6 +13,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Db.openDb();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
