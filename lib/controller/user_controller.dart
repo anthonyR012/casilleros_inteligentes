@@ -24,4 +24,16 @@ class UserController {
       return null;
     }
   }
+
+    Future<UserModel?> findUser() async {
+    final List<Map<String, dynamic>> userMaps = await Db.dbInstance!.query(
+      'user',
+    );
+
+    if (userMaps.isNotEmpty) {
+      return UserModel.fromJson(userMaps.first);
+    } else {
+      return null;
+    }
+  }
 }

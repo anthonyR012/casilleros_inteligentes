@@ -21,6 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _loginWithFingerPrint = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -92,15 +93,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(
                         width: width * 0.2,
-                        child: InkWell(
-                            splashFactory: NoSplash.splashFactory,
-                            onTap: () {},
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.transparent,
-                              child: Image.asset(
-                                  '$gestorImageBase/finger_print.png'),
-                            )),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Ingresar con huella",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: h5Size,
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Switch(
+                              activeColor: orangeColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  _loginWithFingerPrint =
+                                      !_loginWithFingerPrint;
+                                });
+                              },
+                              value: _loginWithFingerPrint,
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -110,15 +124,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       heigth: 60,
                       text: "Registrarme",
                       onPressed: () async {
-                        EasyLoading.show(status: "Cargando...");
                         try {
                           if (_verifyForm()) return;
+                          EasyLoading.show(status: "Cargando...");
                           _userController
                               .insertUser(UserModel(
                                   id: null,
                                   name: _nameController.text,
                                   email: _emailController.text,
-                                  fingerprint: "",
+                                  fingerprint: _loginWithFingerPrint ? "1" :"0",
                                   password: _passwordController.text))
                               .then((value) {
                             EasyLoading.showSuccess("Usuario creado.");

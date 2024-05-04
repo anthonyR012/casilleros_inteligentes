@@ -7,6 +7,7 @@ class AlertOverlayCenter extends StatelessWidget {
     required this.buildContext,
     required this.pathImage,
     required this.onTapClose,
+    required this.onTapAuth,
     this.heightContainer = 300,
     this.widthContainer = 450,
     this.imageSize = 200,
@@ -18,6 +19,7 @@ class AlertOverlayCenter extends StatelessWidget {
   final String pathImage;
   final BuildContext buildContext;
   final dynamic onTapClose;
+  final dynamic onTapAuth;
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +43,15 @@ class AlertOverlayCenter extends StatelessWidget {
                 top: 50,
                 child: Column(
                   children: [
-                    const Text(
-                      "Auntenticación con huella",
-                      style: TextStyle(
-                          fontSize: h4Size + 2,
-                          color: whiteColor,
-                          fontWeight: FontWeight.bold),
+                    InkWell(
+                      onTap: onTapAuth,
+                      child: const Text(
+                        "Auntenticación con huella",
+                        style: TextStyle(
+                            fontSize: h4Size + 2,
+                            color: whiteColor,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Container(
                       width: widthContainer,

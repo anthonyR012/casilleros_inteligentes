@@ -1,5 +1,6 @@
 import 'package:casilleros_inteligente/config/navigators.dart';
 import 'package:casilleros_inteligente/config/theme.dart';
+import 'package:casilleros_inteligente/controller/local_auth_controller.dart';
 import 'package:casilleros_inteligente/controller/user_controller.dart';
 import 'package:casilleros_inteligente/view/home/home_screen.dart';
 import 'package:casilleros_inteligente/view/login/widgets/alert_center_custom.dart';
@@ -23,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UserController _userController = UserController();
-
+  final LocalAuthController _localAuthController = LocalAuthController();
   @override
   void initState() {
     alert.initState(context: context);
@@ -94,12 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _emailController.text,
                                       _passwordController.text);
                                   if (user == null) {
-                                    throw Exception(
-                                        "No se encontró el usuario");
+                                    throw "No se encontró el usuario";
                                   }
                                   EasyLoading.showSuccess("Ingresando...");
                                   pushReplacementWidget(
-                                      const HomeScreen(), context);
+                                      HomeScreen(userModel: user), context);
                                 } catch (e) {
                                   EasyLoading.showError(e.toString());
                                 }
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             flex: 0,
                             child: InkWell(
                                 splashFactory: NoSplash.splashFactory,
-                                onTap: alert.show,
+                                onTap: authenticate,
                                 child: CircleAvatar(
                                   radius: 25,
                                   backgroundColor: Colors.transparent,
@@ -137,11 +137,33 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _verifyForm() {
     return !_formKey.currentState!.validate();
   }
+
+  void authenticate() async {
+    try {
+      final user = await _userController.findUser();
+      if (user == null) {
+        EasyLoading.showError("Primero regístrate.");
+        return;
+      }
+      if (user.fingerprint == "0") {
+        EasyLoading.showError("Esta cuenta no permite ingreso biométrico.");
+      }
+      final bool isAuthenticate = await _localAuthController.authenticate();
+      if (isAuthenticate) {
+        EasyLoading.showSuccess("Bienvenido");
+        pushReplacementWidget(HomeScreen(userModel: user), context);
+      }
+    } catch (e) {
+      EasyLoading.showError("No tienes registros biométricos establecidos.");
+    }
+  }
 }
 
 class AlertManageOverlay {
   OverlayEntry? alertEntryCenter;
   OverlayState? overlayState;
+
+  final LocalAuthController _localAuthController = LocalAuthController();
 
   void initState({required BuildContext context}) {
     overlayState = Overlay.of(context);
@@ -150,6 +172,7 @@ class AlertManageOverlay {
         return AlertOverlayCenter(
           buildContext: context,
           onTapClose: hide,
+          onTapAuth: authenticate,
           pathImage: '$gestorImageBase/figer_print_orange.png',
         );
       },
@@ -158,6 +181,17 @@ class AlertManageOverlay {
 
   void show() {
     overlayState!.insert(alertEntryCenter!);
+  }
+
+  void authenticate() async {
+    try {
+      final bool isAuthenticate = await _localAuthController.authenticate();
+      if (isAuthenticate) {
+        EasyLoading.showSuccess("Bienvenido");
+      }
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    }
   }
 
   void hide() {
